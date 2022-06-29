@@ -1,0 +1,8 @@
+Flask==2.1.0
+Flask-API==3.0.post1
+Flask-Cors==3.0.10
+--extra-index-url https://download.pytorch.org/whl/cu111 "torch==1.8.0+cu111"
+torchtext==0.9.0
+torchvision==0.9.0+cu111
+nltk
+opencv-python
