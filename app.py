@@ -6,6 +6,7 @@ import logging
 logging.basicConfig(level= logging.INFO)
 from modules.Hi_MAP import translate
 from nltk.tokenize import word_tokenize
+from nltk import WordPunctTokenizer
 
 import argparse
 import sys
@@ -38,7 +39,9 @@ def clean_summary_str(s):
 
 def preprocess(s):
     s= s.lower()
-    w_tokens = word_tokenize(s)
+    wpt = WordPunctTokenizer()
+    w_tokens = wpt.tokenize(s)
+    # w_tokens = word_tokenize(s)
     return " ".join(text for text in w_tokens)
     
 class DeprecateAction(argparse.Action):
@@ -210,6 +213,6 @@ def abstract():
         return  result
     return result
     
-app.run(host='0.0.0.0', port=6688)
+app.run(host='0.0.0.0', port=6687)
 
 
