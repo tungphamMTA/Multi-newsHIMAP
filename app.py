@@ -180,13 +180,37 @@ parser = argparse.ArgumentParser(
 opt = translate_opts(parser)
 opt = parser.parse_args()
 
-translator = build_translator(opt, report_score=True)
+pid = None
+translator = None
+
+
+def run(status):
+    global translator
+    if status == False:
+        os.system(f'python kill.py {pid}')
+        # print("*aadhfalkdflaskjdf")
+        return
+
+    if status ==True:
+        if translator==None:
+            translator = build_translator(opt, report_score=True)
+
+
+@app.route('/change_status', methods=['POST'])
+def post_change():
+    content = request.get_json()  
+    status = content["status"]
+    run(status)
+    return {"result":True} 
+
+
+
 
 @app.route('/')
 def GetStatusService():
     return "start",status.HTTP_200_OK
 
-@app.route('/abstract', methods=["POST"])
+@app.route('/HiMap', methods=["POST"])
 def abstract():   
     content = request.get_json()
     # print(content)
@@ -213,6 +237,6 @@ def abstract():
         return  result
     return result
     
-app.run(host='0.0.0.0', port=6687)
+app.run(host='0.0.0.0', port=8898)
 
 

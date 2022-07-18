@@ -17,7 +17,7 @@ def run():
 @app.route('/change_status_root', methods=['POST'])
 def post():
     content = request.get_json()
-    url = 'http://127.0.0.1:6687/change_status'
+    url = 'http://127.0.0.1:8898/change_status'
     myobj = {'status': content["status"]}
     try:
         requests.post(url=url, json=myobj)
