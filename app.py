@@ -13,6 +13,7 @@ import sys
 import os
 from translate_infer import build_translator
 import re
+import helpers
 
 app = Flask(__name__)
 CORS(app)
@@ -212,31 +213,25 @@ def GetStatusService():
 
 @app.route('/HiMap', methods=["POST"])
 def abstract():   
-    content = request.get_json()
-    # print(content)
-    result = {}
-    result['Summary'] = ''
-    if content['text'] is not None:
-        # content['text'] = content['document']
-        
-        # list text input 
-        # ex: [ document1, document2]
-        assert isinstance(content['text'],  list)
-        if len(content['text']) > 0:
-            texts_to_translate = [preprocess(x) for x in content['text']]
-            try:
-                scores, predictions = translator.translate(
-                    src_data_iter=texts_to_translate,
-                    batch_size=opt.batch_size)
-            except RuntimeError as e:
-                raise ("Runtime Error: %s" % str(e))
-            clean_summary =[]
-            for pred in predictions:
-                clean_summary.append(clean_summary_str(pred[0]))
-        result['Summary'] = clean_summary
-        return  result
-    return result
+    content = request.get_json()  
+    list_input_text = content["list_doc"]
+    text_concate = helpers.concate_text(list_input_text)
+    docs = helpers.split_doc(text_concate,2000)
+    texts_to_translate = [preprocess(doc) for doc in docs]
+    summary = ""    
+    try:
+        scores, predictions = translator.translate(
+            src_data_iter=texts_to_translate,
+            batch_size=opt.batch_size)
+    except RuntimeError as e:
+        raise ("Runtime Error: %s" % str(e))
+    clean_summary = ""
+    for pred in predictions:
+        clean_summary +=clean_summary_str(pred[0]) + "\n"
+    summary +=clean_summary
+    return {"result": summary},200
     
 app.run(host='0.0.0.0', port=8898)
 
 
+#############################################################################################################
