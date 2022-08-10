@@ -7,6 +7,8 @@ from nltk.tokenize.treebank import TreebankWordDetokenizer
 from nltk.tokenize import word_tokenize
 from nltk import WordPunctTokenizer
 
+
+
 def split_doc(text, max_length):
     """
     doc: document >=4096 word
@@ -22,19 +24,22 @@ def split_doc(text, max_length):
     length_text = len(word_tokens_split)
     doc_split_num = length_text // max_length + 1
 
-    word_in_sub_doc = max_length // doc_split_num
-
+    word_in_sub_doc = length_text // doc_split_num
     count = 0
     text  = ""
     result = []
+    count_doc = 0
     for sentence in sentence_tokens:
         count += len(word_tokenize(sentence))
         if count > word_in_sub_doc:
             count = 0
+            count_doc +=1
             result.append(text)
             text = ""
         text += " ".join(sentence.split()) +" "
-    
+    # append last doc
+    if count_doc < doc_split_num:
+        result.append(text)
     return result
 
 def preprocess(s):

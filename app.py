@@ -230,8 +230,11 @@ def abstract():
         clean_summary +=clean_summary_str(pred[0]) + "\n"
     summary +=clean_summary
     return {"result": summary},200
-    
-app.run(host='0.0.0.0', port=8898)
+
+if __name__=="__main__":
+    pid = os.getpid()
+    run(True)
+    app.run(host='0.0.0.0', port=8898)
 
 
 #############################################################################################################
